@@ -31,12 +31,14 @@ mvn spring-boot:run
 Or by importing the project in your favourite IDE and start the service.
 
 Then you can check records in the H2 database: http://localhost:8080/h2
+
 JDBC URL: jdbc:h2:mem:demodb
 User Name: root
 
 											ENDPOINTS
 
 Here the examples of the endpoints for testing the RESTful API. You can try these endpoints in any testing tool for Web services like Postman.
+
 I also included Swagger configuracion to try them out throught it by going on: http://localhost:8080/swagger-ui.html
 
 The endpoints are:
