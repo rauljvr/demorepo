@@ -1,0 +1,21 @@
+DROP TABLE IF EXISTS currency;
+DROP TABLE IF EXISTS account;
+DROP TABLE IF EXISTS money;
+ 
+CREATE TABLE currency (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  code CHAR(3) NOT NULL
+);
+
+CREATE TABLE account (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(40) NOT NULL,
+  currency_id INT NOT NULL,
+  treasury BOOLEAN NOT NULL,
+  UNIQUE KEY acc_name (name)
+);
+ 
+CREATE TABLE money (
+  account_id INT PRIMARY KEY,
+  balance DECIMAL(20, 2) NOT NULL
+);
