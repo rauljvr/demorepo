@@ -23,17 +23,17 @@ Spring Boot 2.3.4, Eclipse 2019-12, Spring Tools 3, Maven 3.6.2, Java 1.8, H2 in
 
 To run the application just execute the following commands using any Command prompt, as long as the Maven environment variables have been configured in advanced.
 
->> mvn clean install
+> mvn clean install
 
->> mvn spring-boot:run
+> mvn spring-boot:run
 
 Or by importing the project in your favourite IDE and start the service.
 
 Then you can check the records in the H2 console: http://localhost:8080/h2
 
-JDBC URL: jdbc:h2:mem:demodb
+- JDBC URL: jdbc:h2:mem:demodb
 
-User Name: root
+- User Name: root
 
 									ENDPOINTS
 
