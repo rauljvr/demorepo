@@ -53,14 +53,14 @@ Method GET:
 
 Method PATCH:
 
-4. Creating an account: for existing accounts it also creates or updates the currency and money entities (It's not allowed to modify the treasury attribute) 
+4. Creating an account: for existing accounts it also creates or updates the currency and money entities (It's not allowed to modify the treasury attribute): 
 http://localhost:8080/accountService/createAccount
 
 Json body: { "name": "savings3", "currency": { "currencyCode": "CAN" }, "money": { "balance": 90.00 }, "treasury": false }
 
 Method PUT:
 
-5. Making a transfer between accounts by updating their balances
+5. Making a transfer between accounts by updating their balances:
 http://localhost:8080/accountService/transferMoneyAccount
 
 Json body: { "fromAccount": "savings1", "toAccount": "savings2", "money": 200.00 }
