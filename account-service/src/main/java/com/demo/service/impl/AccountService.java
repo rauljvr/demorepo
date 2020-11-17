@@ -81,17 +81,6 @@ public class AccountService implements IAccountService {
 			newAccount.getMoney().setAccount(newAccount);
 			return accountRepository.save(newAccount);
 		});
-
-		// if (accountEntity.isPresent()) {
-		// 		AccountEntity oldAccount = accountEntity.get();
-		// 		oldAccount.setCurrency(currencyToSave);
-		// 		oldAccount.getMoney().setBalance(newAccount.getMoney().getBalance());
-		// 		return accountRepository.save(oldAccount);
-		// } else {
-		// 		newAccount.getMoney().setAccount(newAccount);
-		// 		newAccount.setCurrency(currencyToSave);
-		// 		return accountRepository.save(newAccount);
-		// }
 	}
 
 	@Override

@@ -5,7 +5,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -62,41 +62,45 @@ public class AccountServiceControllerTest {
 	}
 
 	@Test
+	public void whenPathVariableIsInvalid_thenReturnsStatus500() throws Exception {
+
+		mvc.perform(get("/accountService/account/sav")).andExpect(status().isInternalServerError());
+	}
+
+	@Test
+	public void whenInputIsInvalid_thenReturnsStatus400() throws Exception {
+		AccountDto accDto = createTestAccountDto("", ACC_CURRENCY, ACC_MONEY);
+		mvc.perform(
+				post("/accountService/createAccount").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(accDto)))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void givenAccount_whenGetAccount_thenAccountIsRetrieveAndStatusIs200() throws Exception {
+		createTestAccountentity();
+		mvc.perform(get("/accountService/account/" + ACC_NAME).accept(MediaType.APPLICATION_JSON)).andDo(print())
+				.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andExpect(jsonPath("$.name", is(ACC_NAME)))
+				.andExpect(jsonPath("$.currency.currencyCode", is(ACC_CURRENCY)))
+				.andExpect(jsonPath("$.money.balance").value((double)120.00));
+	}
+
+	@Test
 	public void whenValidInput_thenAccountIsCreated() throws IOException, Exception {
 		AccountDto accDto = createTestAccountDto(ACC_NAME, ACC_CURRENCY, ACC_MONEY);
 		mvc.perform(
-				patch("/accountService/createAccount").contentType(MediaType.APPLICATION_JSON).content(JsonUtil.toJson(accDto)));
+				post("/accountService/createAccount").contentType(MediaType.APPLICATION_JSON)
+				.content(JsonUtil.toJson(accDto))
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.name").exists())
+				.andExpect(jsonPath("$.currency.currencyCode").isNotEmpty());
 
 		AccountEntity acc = repository.findByName(ACC_NAME).get();
 		assertNotNull(acc);
 		assertThat(acc).extracting(AccountEntity::getName).isEqualTo(ACC_NAME);
 		assertEquals(ACC_CURRENCY, acc.getCurrency().getCurrencyCode());
 		assertEquals(ACC_MONEY, acc.getMoney().getBalance());
-	}
-
-	@Test
-	public void givenAccount_whenGetAccount_thenAccountIsRetrieveAndStatusIs200() throws Exception {
-		createTestAccountentity();
-
-		mvc.perform(get("/accountService/account/" + ACC_NAME).contentType(MediaType.APPLICATION_JSON)).andDo(print())
-				.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.name", is(ACC_NAME)))
-				.andExpect(jsonPath("$.currency.currencyCode", is(ACC_CURRENCY)));
-	}
-
-	@Test
-	public void whenInputIsInvalid_thenReturnsStatus400() throws Exception {
-		AccountDto accDto = createTestAccountDto("", ACC_CURRENCY, ACC_MONEY);
-
-		mvc.perform(
-				patch("/accountService/createAccount").contentType("application/json").content(JsonUtil.toJson(accDto)))
-				.andExpect(status().isBadRequest());
-	}
-
-	@Test
-	public void whenPathVariableIsInvalid_thenReturnsStatus500() throws Exception {
-
-		mvc.perform(get("/accountService/account/sav")).andExpect(status().isInternalServerError());
 	}
 
 	private AccountDto createTestAccountDto(String name, String currency, BigDecimal balance) {

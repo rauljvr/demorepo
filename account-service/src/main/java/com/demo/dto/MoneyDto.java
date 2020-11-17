@@ -12,11 +12,11 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class MoneyDto {
 
 	@Positive(message = "balance field must be positive")
-	@Min(value=1, message = "The minimum balance is 1 euro")
+	@Min(value=1, message = "The minimum balance is €1")
 	private BigDecimal balance;
 }

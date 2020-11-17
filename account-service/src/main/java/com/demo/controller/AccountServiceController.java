@@ -1,23 +1,20 @@
 package com.demo.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +24,8 @@ import com.demo.dto.AccountDto;
 import com.demo.dto.TransferAccountDto;
 import com.demo.exceptionshandler.ForbiddenTransferException;
 import com.demo.exceptionshandler.ResourceNotFoundException;
-import com.demo.model.AccountEntity;
 import com.demo.service.IAccountService;
+import com.demo.util.MapConverter;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,12 +40,12 @@ import lombok.extern.slf4j.Slf4j;
 public class AccountServiceController {
 
 	private IAccountService accountService;
-	private ModelMapper modelMapper;
+	private MapConverter mapConverter;
 
 	@Autowired
-	public AccountServiceController(@Lazy IAccountService accountService, ModelMapper modelMapper) {
+	public AccountServiceController(@Lazy IAccountService accountService, MapConverter mapConverter) {
 		this.accountService = accountService;
-		this.modelMapper = modelMapper;
+		this.mapConverter = mapConverter;
 	}
 
 	/**
@@ -63,7 +60,7 @@ public class AccountServiceController {
 			@PathVariable(value = "accountName") @Size(min = 4, max = 45) String accountName)
 			throws ResourceNotFoundException {
 		log.info("Getting the account: {}", accountName);
-		return ResponseEntity.ok().body(convertToDto(accountService.getAccount(accountName)));
+		return ResponseEntity.ok().body(mapConverter.convertToDto(accountService.getAccount(accountName)));
 	}
 
 	/**
@@ -76,7 +73,7 @@ public class AccountServiceController {
 	public ResponseEntity<List<AccountDto>> getAccounts() throws ResourceNotFoundException {
 		log.info("Getting all accounts");
 
-		return ResponseEntity.ok().body(convertListToDtoList(accountService.getAccounts()));
+		return ResponseEntity.ok().body(mapConverter.convertListToDtoList(accountService.getAccounts()));
 	}
 
 	/**
@@ -90,7 +87,7 @@ public class AccountServiceController {
 	public ResponseEntity<Page<AccountDto>> getAccountsPageable(Pageable pageRequest) throws ResourceNotFoundException {
 		log.info("Getting Pageable list for all accounts");
 
-		return ResponseEntity.ok().body(convertPageToDtoList(accountService.getAccountsPagable(pageRequest)));
+		return ResponseEntity.ok().body(mapConverter.convertPageToDtoList(accountService.getAccountsPagable(pageRequest)));
 	}
 
 	/**
@@ -100,12 +97,12 @@ public class AccountServiceController {
 	 * @return the account created
 	 * @throws ResourceNotFoundException
 	 */
-	@PatchMapping("/createAccount")
+	@PostMapping("/createAccount")
 	public ResponseEntity<AccountDto> createAccount(@Valid @RequestBody AccountDto account) {
 		log.info("Creating the account: {}", account.toString());
 
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(convertToDto(accountService.createAccount(convertToEntity(account))));
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(mapConverter.convertToDto(accountService.createAccount(mapConverter.convertToEntity(account))));
 	}
 
 	/**
@@ -123,29 +120,8 @@ public class AccountServiceController {
 				transferDto.getFromAccount(), transferDto.getToAccount(), transferDto.getMoney());
 
 		return ResponseEntity.status(HttpStatus.OK)
-				.body(convertToDto(accountService.transferMoneyAccount(transferDto.getFromAccount(),
+				.body(mapConverter.convertToDto(accountService.transferMoneyAccount(transferDto.getFromAccount(),
 						transferDto.getToAccount(), transferDto.getMoney())));
-	}
-
-	private AccountDto convertToDto(AccountEntity accountEntity) {
-		return modelMapper.map(accountEntity, AccountDto.class);
-	}
-
-	private List<AccountDto> convertListToDtoList(List<AccountEntity> accounts) {
-
-		return accounts.stream().map(acc -> convertToDto(acc)).collect(Collectors.toList());
-	}
-
-	private Page<AccountDto> convertPageToDtoList(Page<AccountEntity> accounts) {
-
-		List<AccountDto> accountList = accounts.getContent().stream().map(acc -> convertToDto(acc))
-				.collect(Collectors.toList());
-
-		return new PageImpl<>(accountList);
-	}
-
-	private AccountEntity convertToEntity(AccountDto accountDto) {
-		return modelMapper.map(accountDto, AccountEntity.class);
 	}
 
 }

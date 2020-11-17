@@ -51,9 +51,9 @@ Method GET:
 
 3. Get a pageable list with all accounts http://localhost:8080/accountService/accountsPageable
 
-Method PATCH:
+Method POST:
 
-4. Creating an account: for existing accounts it also creates or updates the currency and money entities (It's not allowed to modify the treasury attribute): 
+4. Creating an account: for existing accounts it also creates or updates the currency and money entities: 
 http://localhost:8080/accountService/createAccount
 
 Json body: { "name": "savings3", "currency": { "currencyCode": "CAN" }, "money": { "balance": 90.00 }, "treasury": false }
