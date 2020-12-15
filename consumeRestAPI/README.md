@@ -1,7 +1,8 @@
 # Demo project using Spring Boot for consuming a Rest API through a custom RestTemplate Client
 
+I developed a Rest API which provides an interface to be able to call the services of the fake Rest API offered by jsonplaceholder.
 
-									WHAT IS NEEDED?
+								WHAT IS NEEDED?
 
 To develope this project I worked with a bunch of frameworks, patterns and tools such as:
 
