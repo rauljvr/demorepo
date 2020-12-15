@@ -1,0 +1,39 @@
+server:
+  port: 8080
+  
+placeholder:
+  baseUrl:
+    apirest: https://jsonplaceholder.typicode.com
+  endpoint:
+    albumsPath: "${placeholder.baseUrl.apirest}/albums"
+    albumPath: "${placeholder.baseUrl.apirest}/albums/{albumId}"
+    photosPath: "${placeholder.baseUrl.apirest}/photos"
+    photoPath: "${placeholder.baseUrl.apirest}/photos/{photoId}"
+  output:
+    albumJsonFile: /home/verasteguir/data/album.json
+    albumXmlFile: /home/verasteguir/data/album.xml
+#    albumJsonFile: C:/data/album.json
+#    albumXmlFile: C:/data/album.xml
+
+spring:
+  datasource:
+#    url: jdbc:h2:file:/data/apirestdb
+    url: jdbc:h2:mem:apirestdb;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: root
+    password:
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2
+      
