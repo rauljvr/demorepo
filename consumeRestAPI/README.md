@@ -86,9 +86,9 @@ Method DELETE:
 
 									SETTINGS
 
-1. By default I decided to load some data in the DB in advance, only for the tables 'User' and 'Company' in order to show the implementation of the repository layer.
+- By default I decided to load some data in the DB in advance, only for the tables 'User' and 'Company' in order to show the implementation of the repository layer.
 
-2. As required, the data of one the resources is storing in Json and XML files once is got from the external Rest API. I also persist the info in the H2 DB (Embedded). The path of this files can be configured in the YAML file (application.yml) which will depend on the OS that you are using.
+- As required, the data of one the resources is storing in Json and XML files once is got from the external Rest API. I also persist the info in the H2 DB (Embedded). The path of this files can be configured in the YAML file (application.yml) which will depend on the OS that you are using.
 
 	- placeholder.output.albumJsonFile
 	- placeholder.output.albumXmlFile
