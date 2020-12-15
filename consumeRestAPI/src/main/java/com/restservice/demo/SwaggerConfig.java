@@ -25,16 +25,15 @@ public class SwaggerConfig {
 	}
 
 	private Predicate<String> getPaths() {
-		return or(regex("/accountService/.*"), regex("/accountService/account.*"));
+		return or(regex("/restApiService/.*"), regex("/restApiService/album.*"), regex("/restApiService/photo.*"));
 	}
 
 	/**
 	 * Go on http://localhost:8080/swagger-ui.html or
-	 * http://localhost:8080/swagger-ui.html#/account-service-controller to try the
-	 * RESTful WS
+	 * http://localhost:8080/swagger-ui.html#/rest-api-controller to try the REST WS
 	 */
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("Account Service API").description("Tech demo")
+		return new ApiInfoBuilder().title("Rest API Service ").description("Tech demo")
 				.termsOfServiceUrl("http://localhost").contact("Raúl Verastegui").license("Open source license")
 				.licenseUrl("https://www.google.com").version("1.0").build();
 	}
