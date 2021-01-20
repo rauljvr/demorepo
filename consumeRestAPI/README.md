@@ -1,6 +1,6 @@
 # Demo project using Spring Boot for consuming a Rest API through a custom RestTemplate Client
 
-I developed a Rest API which provides an interface to be able to call the services of the fake Rest API offered by jsonplaceholder.
+I developed a Rest API which provides an interface to be able to call the services of the fake Rest API offered by https://jsonplaceholder.typicode.com.
 
 								WHAT IS NEEDED?
 
@@ -89,7 +89,9 @@ Method DELETE:
 
 - By default I decided to load some data in the DB in advance, only for the tables 'User' and 'Company' in order to show the implementation of the repository layer.
 
-- As required, the data of one the resources is storing in Json and XML files once is got from the external Rest API. I also persist the info in the H2 DB (Embedded). The path of this files can be configured in the YAML file (application.yml) which will depend on the OS that you are using.
+- The data of the Album resource is stored in format files (JSON, XML) once is got it from the external Rest API. It is also persisted in the H2 DB (Embedded). 
+
+	The path of this files can be configured in the YAML file (application.yml) which will depend on the OS that you are using.
 
 	- placeholder.output.albumJsonFile
 	- placeholder.output.albumXmlFile
